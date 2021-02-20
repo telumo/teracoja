@@ -4,6 +4,4 @@
 // const { default: init } = require('./pkg/teracoja.js')
 
 // that no one else needs to worry about it again.
-import('./pkg').then((module) => {
-  module.run_app()
-})
+import('./pkg')
