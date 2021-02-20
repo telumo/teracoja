@@ -1,62 +1,30 @@
 #![recursion_limit = "640"] //https://doc.rust-lang.org/reference/attributes/limits.html#the-recursion_limit-attribute
+mod app_router;
+mod components;
+mod pages;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
-use yew::services::ConsoleService;
 
-mod components;
-use components::counter::Counter;
+use app_router::AppRouter;
 
-struct Model {
-    link: ComponentLink<Self>, // Link to component's scope for creating callbacks
-    value: i64,
-}
-
-enum Msg {
-    AddOne,
-    MinusOne,
-}
+struct Model {}
 
 impl Component for Model {
-    type Message = Msg;
+    type Message = ();
     type Properties = ();
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, value: 0 }
+    fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
+        Self {}
     }
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
-        match msg {
-            Msg::AddOne => {
-                self.value += 1;
-                ConsoleService::log("Added.");
-            }
-            Msg::MinusOne => {
-                self.value -= 1;
-                ConsoleService::log("Added.");
-            }
-        }
-        true
+    fn update(&mut self, _: Self::Message) -> ShouldRender {
+        false
     }
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
         false
     }
     fn view(&self) -> Html {
         html! {
-            <div class="flex items-center justify-center h-screen">
-                <Counter>
-                    { self.value }
-                </Counter>
-                <div class="">
-                    <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold
-                        hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                        onclick=self.link.callback(|_| Msg::AddOne)>{ "+1" }</button>
-                    <button class="bg-transparent hover:bg-blue-700 text-blue-900 font-semibold
-                        hover:text-white py-2 px-4 border border-blue-700 hover:border-transparent rounded"
-                        onclick=self.link.batch_callback(|_| vec![Msg::AddOne, Msg::AddOne])>{ "+2" }</button>
-                        <button class="bg-transparent hover:bg-blue-700 text-blue-900 font-semibold
-                        hover:text-white py-2 px-4 border border-blue-700 hover:border-transparent rounded"
-                        onclick=self.link.callback(|_| Msg::MinusOne)>{ "-1" }</button>
-                </div>
-            </div>
+            <AppRouter/>
         }
     }
 }
