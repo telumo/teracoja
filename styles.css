@@ -31176,6 +31176,10 @@ video {
           animation: bounce 1s infinite;
 }
 
+.is_closed {
+  display: none;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
