@@ -1,6 +1,7 @@
 const path = require('path')
 const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const distPath = path.resolve(__dirname, 'dist')
 module.exports = (env, argv) => {
@@ -19,12 +20,20 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.s[ac]ss$/i,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          test: /\.css$/,
+          exclude: /node_modules/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            { loader: 'postcss-loader' },
+          ],
         },
       ],
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
       new CopyWebpackPlugin({
         patterns: [{ from: './static', to: distPath }],
       }),
